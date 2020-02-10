@@ -2693,6 +2693,11 @@
     githubId = 313929;
     name = "Gabriel Ebner";
   };
+  gefla = {
+    email = "gefla@pond.sub.org";
+    github = "gefla";
+    name = "Gerd Flaig";
+  };
   geistesk = {
     email = "post@0x21.biz";
     github = "geistesk";

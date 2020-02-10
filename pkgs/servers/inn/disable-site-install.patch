@@ -1,0 +1,12 @@
+diff -u orig/inn-2.6.3/Makefile inn-2.6.3/Makefile
+--- orig/inn-2.6.3/Makefile	2019-02-07 16:02:22.000000000 +0100
++++ inn-2.6.3/Makefile	2020-02-23 15:22:35.013918163 +0100
+@@ -21,7 +21,7 @@
+ PROGDIRS    = innd nnrpd innfeed control expire frontends backends authprogs \
+               scripts
+ UPDATEDIRS  = $(LIBDIRS) $(PROGDIRS) doc
+-ALLDIRS     = $(UPDATEDIRS) samples site
++ALLDIRS     = $(UPDATEDIRS) samples #site
+ CLEANDIRS   = $(ALLDIRS) contrib tests
+ 
+ ##  The directory name and tar file to use when building a release.

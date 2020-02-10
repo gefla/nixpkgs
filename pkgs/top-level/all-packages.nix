@@ -1894,6 +1894,8 @@ in
 
   ifm = callPackage ../tools/graphics/ifm {};
 
+  inn = callPackage ../servers/inn {};
+
   interlock = callPackage ../servers/interlock {};
 
   jellyfin = callPackage ../servers/jellyfin { ffmpeg = ffmpeg_4; };
