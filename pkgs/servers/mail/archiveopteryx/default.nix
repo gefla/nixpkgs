@@ -12,10 +12,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl perl zlib ];
 
   preConfigure = ''
-    export INSTALLROOT=installroot
+    export INSTALLROOT=installroot PIDFILEDIR=/run/aox
     sed -i 's:BINDIR = $(PREFIX)/bin:BINDIR = '$out'/bin:' ./Jamsettings
     sed -i 's:SBINDIR = $(PREFIX)/sbin:SBINDIR = '$out'/bin:' ./Jamsettings
     sed -i 's:LIBDIR = $(PREFIX)/lib:LIBDIR = '$out'/lib:' ./Jamsettings
+    sed -i 's:CONFIGDIR = $(PREFIX):CONFIGDIR = /etc/aox:' ./Jamsettings
+    sed -i 's:JAILDIR = $(PREFIX)/jail:JAILDIR = /var/lib/aox/jail:' ./Jamsettings
     sed -i 's:MANDIR = $(PREFIX)/man:MANDIR = '$out'/share/man:' ./Jamsettings
     sed -i 's:READMEDIR = $(PREFIX):READMEDIR = '$out'/share/doc/archiveopteryx:' ./Jamsettings
   '';
