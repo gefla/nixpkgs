@@ -81,7 +81,7 @@ in
       };
       dbAddress = mkOption {
         type = types.str;
-        default = "/var/run/postgresql/.s.PGSQL.5432";
+        default = "127.0.0.1";
         description = "PostgreSQL database address";
       };
       lmtpAddress = mkOption {
@@ -102,21 +102,44 @@ in
       };
       users.groups.aox = {};
 
+      systemd.services.aox-init = {
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "postgresql.service" ];
+        after = [ "postgresql.service" ];
+        path = [ pkgs.postgresql ];
+        preStart = ''
+          mkdir -p /var/lib/aox/jail
+          chmod 001 /var/lib/aox/jail
+          systemctl status postgresql.service
+          PSQL="${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql"
+          $PSQL -c "ALTER USER aox PASSWORD 'aox'" aox
+       '';
+       serviceConfig = {
+          ExecStart = ''
+            ${pkgs.archiveopteryx}/lib/installer -s /var/run/postgresql/.s.PGSQL.5432
+          '';
+       postStart = ''
+            PSQL="${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql"
+            $PSQL <<__EOF
+            \l
+            \d aox
+            \d archiveopteryx
+            __EOF
+          '';
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+      };
       systemd.services.aox = {
         description = "Aox IMAP server";
-        after = [ "postresql.service" ];
-        requires = [ "postgresql.service" ];
+        after = [ "aox-init.service" ];
+        requires = [ "aox-init.service" ];
         wantedBy = [ "multi-user.target" ];
 
+        path = [ pkgs.openssl ];
         serviceConfig = {
           Type = "forking";
           PIDFile = "/run/aox/archiveopteryx.pid";
-          ExecStartPre = pkgs.writeScript "aox-init" ''
-              #!/bin/sh
-              mkdir -p /var/lib/aox/jail
-              chmod 001 /var/lib/aox/jail
-              yes | ${pkgs.archiveopteryx}/lib/installer
-          '';
           ExecStart = "${pkgs.archiveopteryx}/bin/aox -v -v start";
           Restart = "on-failure";
           LogsDirectory = "aox";
