@@ -5,7 +5,7 @@ import ./make-test-python.nix {
     services.aox.enable = true;
     services.postgresql = {
       enable = true;
-      package = pkgs.postgresql_9_6;
+      package = pkgs.postgresql; #_9_6;
       ensureDatabases = ["aox"];
       ensureUsers = [{
         name = "aox";
