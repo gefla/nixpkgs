@@ -24,9 +24,9 @@ let
     ''}
     log-level = info
     # Uncomment the following ONLY if necessary for debugging.
-    # security = off
-    # use-tls = false
-    use-imaps = true
+    security = off
+    use-tls = false
+    #use-imaps = true
     use-smtp-submit = false
     #use-http = true
     use-sieve = true
@@ -112,22 +112,14 @@ in
           chmod 001 /var/lib/aox/jail
           systemctl status postgresql.service
           PSQL="${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql"
-          $PSQL -c "ALTER USER aox PASSWORD 'aox'" aox
-       '';
-       serviceConfig = {
+          #$PSQL -c "ALTER USER aox PASSWORD 'aox'" aox
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
           ExecStart = ''
             ${pkgs.archiveopteryx}/lib/installer -s /var/run/postgresql/.s.PGSQL.5432
           '';
-       postStart = ''
-            PSQL="${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql"
-            $PSQL <<__EOF
-            \l
-            \d aox
-            \d archiveopteryx
-            __EOF
-          '';
-          Type = "oneshot";
-          RemainAfterExit = true;
         };
       };
       systemd.services.aox = {
@@ -137,6 +129,14 @@ in
         wantedBy = [ "multi-user.target" ];
 
         path = [ pkgs.openssl ];
+        preStart = ''
+            PSQL="${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql"
+            $PSQL <<__EOF
+            \l
+            \c archiveopteryx
+            \d
+            __EOF
+          '';
         serviceConfig = {
           Type = "forking";
           PIDFile = "/run/aox/archiveopteryx.pid";

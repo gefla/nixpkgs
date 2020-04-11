@@ -5,15 +5,7 @@ import ./make-test-python.nix {
     services.aox.enable = true;
     services.postgresql = {
       enable = true;
-      package = pkgs.postgresql; #_9_6;
-      ensureDatabases = ["aox"];
-      ensureUsers = [{
-        name = "aox";
-        ensurePermissions = {
-          "DATABASE aox" = "ALL PRIVILEGES";
-        };
-      }];
-      #enableTCPIP = true;
+      package = pkgs.postgresql;
     };
   };
 
