@@ -9,7 +9,6 @@ let
   cfg = config.services.aox;
 
   aoxConf = ''
-    #db-address = /var/run/postgresql/.s.PGSQL.
     db-address = ${cfg.dbAddress}
     db-name = ${cfg.dbName}
     db-user = ${cfg.dbUser}
@@ -24,9 +23,10 @@ let
     ''}
     log-level = info
     # Uncomment the following ONLY if necessary for debugging.
-    security = off
-    use-tls = false
+    #security = off
+    #use-tls = false
     #use-imaps = true
+    tls-certificate = ${cfg.cert}
     use-smtp-submit = false
     #use-http = true
     use-sieve = true
@@ -88,6 +88,11 @@ in
         type = types.nullOr types.str;
         default = null;
         description = "LMTP address to listen on. Disabled if null.";
+      };
+      cert = mkOption {
+        type = types.str;
+        default = null;
+        description = "File containing combined key and certificate for TLS";
       };
 
     };
