@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
   #  url = "http://archiveopteryx.org/download/${pname}-${version}.tar.bz2";
   #  sha256 = "0i0zg8di8nbh96qnyyr156ikwcsq1w9b2291bazm5whb351flmqx";
   #};
-  src = fetchgit {
-    url = "https://github.com/aox/aox";
-    rev = "9730b5f98b43316be1180654f3d3bec24a549ac2";
-    sha256 = "0wqjwnyga6s921biha7i6cvr3i9qdgz9w54vgss0r7fmwh7vkwp2";
-  };
-
+  #src = fetchgit {
+  #  url = "https://github.com/aox/aox";
+  #  rev = "9730b5f98b43316be1180654f3d3bec24a549ac2";
+  #  sha256 = "0wqjwnyga6s921biha7i6cvr3i9qdgz9w54vgss0r7fmwh7vkwp2";
+  #};
+  src = ~/src/aox;
   nativeBuildInputs = [ jam ];
   buildInputs = [ openssl perl zlib ];
 
