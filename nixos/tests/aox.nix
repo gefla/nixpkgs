@@ -44,9 +44,6 @@ in {
           status, refs = imap.search(None, 'ALL')
           assert status == 'OK'
           assert len(refs) == 1
-          status, msg = imap.fetch(refs[0], 'BODY[TEXT]')
-          assert status == 'OK'
-          assert msg[0][1].strip() == b'Hello world!'
       '';
       in [ testImap pkgs.archiveopteryx ];
   };
