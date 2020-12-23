@@ -25,7 +25,7 @@ let
     # Uncomment the following ONLY if necessary for debugging.
     #security = off
     #use-tls = false
-    #use-imaps = true
+    use-imaps = true
     tls-certificate = ${cfg.cert}
     use-smtp-submit = false
     #use-http = true
